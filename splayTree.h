@@ -1,11 +1,43 @@
-struct Node{
+#include <iostream>
+
+class Node{
+public:
         int data;
         Node* left;
         Node* right;
-}
+        Node* parent;
 
-class SplayTree{
-        public:
-                Node* access(int i);
-                SplayTree join(SplayTree tree1, SplayTree tree2);
+        Node(int data){
+            left = NULL;
+            right = NULL;
+            parent = NULL;
+            this->data = data;
+        }
 };
+class SplayTree{
+public:
+        Node* access(int i, Node* root);
+        void find(int i);
+        void deleteTree(int i);
+        bool isRoot(Node* n);
+        bool isLeaf(Node *n);
+        SplayTree();
+        void splay(Node* n);
+        Node* getRoot();
+     
+        bool insert(int value);
+        bool insert(int value, Node *n);
+        void printPreOrder() const;
+        void printPreOrder(Node *n) const;
+		Node* max() const;
+		void setRoot(Node* n);
+private:
+        void rotateLeft(Node*xp);
+        void  rotateRight(Node*xp);
+        bool isLeftChild(Node* child); //!child cant be NULL
+        bool isRightChild(Node* child);
+        Node* root;
+
+};
+
+SplayTree join(SplayTree t1, SplayTree t2);
