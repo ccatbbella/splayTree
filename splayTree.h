@@ -18,31 +18,35 @@ public:
             this->data = data;
         }
 };
+
 class SplayTree{
 public:
-        Node* access(int i, Node* root);
-        void find(int i);
-        void deleteTree(int i);
-        bool isRoot(Node* n);
-        bool isLeaf(Node *n);
         SplayTree();
-        void splay(Node* n);
+		void setRoot(Node* n);
         Node* getRoot();
+		Node* max() const;
+		Node* access(int i, Node* root);
      
         void insert(int vi);
-        void printPreOrder() const;
-        void printPreOrder(Node *n) const;
-		Node* max() const;
-		void setRoot(Node* n);
-		std::vector<SplayTree> split(int i);
+		void find(int i);
+		void deleteTree(int i);
+		void print() const;
 private:
         void rotateLeft(Node*xp);
         void rotateRight(Node*xp);
         bool isLeftChild(Node* child); //!child cant be NULL
         bool isRightChild(Node* child);
-        Node* root;
+		bool isRoot(Node* n);
+		bool isLeaf(Node *n);
+		
 
+		void splay(Node* n);
+		std::vector<SplayTree> split(int i);
+		
+        
+		Node* root;
 };
 
 SplayTree join(SplayTree t1, SplayTree t2);
+
 #endif
