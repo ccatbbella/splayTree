@@ -6,6 +6,7 @@ SplayTree::SplayTree(){
     root = NULL;
 }
 
+
 Node* SplayTree::max() const{
 	Node* n = root;
 	while (n->right != NULL) {
@@ -111,44 +112,36 @@ void SplayTree::splay(Node* n){//splay the node n is pointing to
     splay(n);
 }
 
-bool SplayTree::insert(int value)
+void SplayTree::insert(int i)
 {
-    // handle special case of empty tree first
-    if (!root)
+	Node* n = new Node(i);
+    // handle empty tree
+    if (this->root == NULL)
     {
-        root = new Node(value);
-        return true;
+        this->root = n;
+		cout << "item " << i << " inserted" << endl;
+        return;
     }
-    // otherwise use recursive helper
-    return insert(value, root);
+	access(i, root);
+	if (this->root->data == i) {
+		cout << "item " << i << " not inserted; already present" << endl;
+		return;
+	}
+	else {
+		vector<SplayTree> trees = split(i);
+		n->left = trees.at(0).getRoot();
+		if (n->left != NULL) {
+			n->left->parent = n;
+		}
+		n->right = trees.at(1).getRoot();
+		if (n->right != NULL) {
+			n->right->parent = n;
+		}
+		setRoot(n);
+		cout << "item " << i << " inserted" << endl;
+	}
 }
-bool SplayTree::insert(int value, Node *n)
-{
-    if (value == n->data)
-        return false;
-    if (value < n->data)
-    {
-        if (n->left)
-            return insert(value, n->left);
-        else
-        {
-            n->left = new Node(value);
-            n->left->parent = n;
-            return true;
-        }
-    }
-    else
-    {
-        if (n->right)
-            return insert(value, n->right);
-        else
-        {
-            n->right = new Node(value);
-            n->right->parent = n;
-            return true;
-        }
-    }
-}
+
 
 
 void SplayTree::printPreOrder() const
@@ -168,7 +161,7 @@ void SplayTree::printPreOrder(Node *n) const
 }
 
 Node* SplayTree::access(int i, Node* n){ //access i in tree whose root is n, n cannot be NULL
-    if(n->data == i){
+	if(n->data == i){
         splay(n);
         return n;
     }
@@ -179,9 +172,20 @@ Node* SplayTree::access(int i, Node* n){ //access i in tree whose root is n, n c
         }
         else{
             if(n->data < i){
-                return access(i, n->right);
+				if (n->right != NULL) { return access(i, n->right); }
+				else{
+					splay(n);
+					return NULL;
+				}
             }
-            return access(i, n->left);
+			else {
+				if (n->left != NULL) { return access(i, n->left); }
+				else {
+					splay(n);
+					return NULL;
+				}
+
+			}
           
         }
     }
@@ -232,5 +236,36 @@ void SplayTree::deleteTree(int i){
 		SplayTree t3 = join(t1, t2);
 		delete root;
 		root = t3.getRoot();
+		cout << "item " << i << " deleted" << endl;
 	}
+}
+vector<SplayTree> SplayTree::split(int i) {
+	SplayTree t1; SplayTree t2;
+	vector<SplayTree> result;
+	
+	if (root == NULL) {
+		result.push_back(t1);
+		result.push_back(t2);
+		return result;
+	}
+	access(i, root);
+	if(root->data > i){ //break left child link
+		t1.setRoot(this->root->left);
+		if (this->root->left != NULL) {
+			this->root->left->parent = NULL;
+			this->root->left = NULL;
+		}
+		t2.setRoot(this->root);
+	}
+	else { //break right child link
+		t1.setRoot(this->root);
+		t2.setRoot(this->root->right);
+		if (this->root->right != NULL) {
+			this->root->right->parent = NULL;
+			this->root->right = NULL;
+		}
+	}
+	result.push_back(t1);
+	result.push_back(t2);
+	return result;
 }

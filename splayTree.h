@@ -1,4 +1,8 @@
 #include <iostream>
+#include <vector>
+
+#ifndef SPLAYTREE_H
+#define SPLAYTREE_H
 
 class Node{
 public:
@@ -25,15 +29,15 @@ public:
         void splay(Node* n);
         Node* getRoot();
      
-        bool insert(int value);
-        bool insert(int value, Node *n);
+        void insert(int vi);
         void printPreOrder() const;
         void printPreOrder(Node *n) const;
 		Node* max() const;
 		void setRoot(Node* n);
+		std::vector<SplayTree> split(int i);
 private:
         void rotateLeft(Node*xp);
-        void  rotateRight(Node*xp);
+        void rotateRight(Node*xp);
         bool isLeftChild(Node* child); //!child cant be NULL
         bool isRightChild(Node* child);
         Node* root;
@@ -41,3 +45,4 @@ private:
 };
 
 SplayTree join(SplayTree t1, SplayTree t2);
+#endif
