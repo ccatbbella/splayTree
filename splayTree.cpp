@@ -217,13 +217,18 @@ void SplayTree::deleteTree(int i){
 	else{
 		SplayTree t1;
 		t1.setRoot(this->root->left);
-		this->root->left->parent = NULL;
-		this->root->left = NULL;
+		if (this->root->left != NULL) {
+			this->root->left->parent = NULL;
+			this->root->left = NULL;
+		}
 		
 		SplayTree t2;
 		t2.setRoot(this->root->right);
-		this->root->right->parent = NULL;
-		this->root->right = NULL;
+		if (this->root->right != NULL) {
+			this->root->right->parent = NULL;
+			this->root->right = NULL;
+		}
+		
 		SplayTree t3 = join(t1, t2);
 		delete root;
 		root = t3.getRoot();

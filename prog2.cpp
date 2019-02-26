@@ -16,7 +16,7 @@ int main(){
     t1.printPreOrder();
     Node* root = t1.getRoot();
     cout << "root's value is " << root->data << endl;
-    t1.deleteTree(12);
+    t1.deleteTree(5);
     t1.printPreOrder();
    
     root = t1.getRoot();
